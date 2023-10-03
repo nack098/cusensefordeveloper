@@ -16,15 +16,15 @@ const LoginForm: React.FC = () => {
         password,
         redirect: false,
       });
-      console.log(res);
       if (!res) return;
-      if (res.ok) {
+      if (!res.error) {
         toast({
           title: "Success!",
           description: "Your login success",
           duration: 2000,
           status: "success",
         });
+        window.location.href = "/projects";
       } else {
         toast({
           title: "Error!",
@@ -42,6 +42,7 @@ const LoginForm: React.FC = () => {
       });
     }
   };
+
   return (
     <form action={login}>
       <div className="ml-[45px] mt-[5px] flex flex-col">
