@@ -1,8 +1,9 @@
 import { randomUUID } from "crypto";
+import { write}
 
 type Project = {
-  id: string;
-  name: string;
+  id: string,
+  name: string,
 };
 
 const MockProjects: Project[] = [];

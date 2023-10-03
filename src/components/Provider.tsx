@@ -2,6 +2,7 @@
 
 import { CacheProvider } from "@chakra-ui/next-js";
 import { ChakraProvider } from "@chakra-ui/react";
+import { SessionProvider } from "next-auth/react";
 import React from "react";
 
 type Props = {
@@ -10,9 +11,11 @@ type Props = {
 
 const Provider: React.FC<Props> = ({ children }) => {
   return (
-    <ChakraProvider>
-      <CacheProvider>{children}</CacheProvider>
-    </ChakraProvider>
+    <SessionProvider>
+      <ChakraProvider>
+        <CacheProvider>{children}</CacheProvider>
+      </ChakraProvider>
+    </SessionProvider>
   );
 };
 
