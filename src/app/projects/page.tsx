@@ -65,11 +65,8 @@ const splitList = (projects: Project[]) => {
 
 const ProjectList: React.FC<{ projects: Project[] }> = ({ projects }) => {
   const [page, changePage] = useState<number>(1);
-  const [list, updateList] = useState<Array<Project[]>>(splitList(projects));
 
-  useEffect(() => {
-    updateList(splitList(projects));
-  }, [projects]);
+  const list = splitList(projects);
 
   return (
     <>
@@ -168,18 +165,6 @@ const Projects: React.FC = () => {
       Promise.reject(data);
     };
   }, [session]);
-
-  useEffect(() => {
-    if (sortBy === "name") {
-      updateData(data.sort((a, b) => (a.name < b.name ? 1 : -1)));
-    } else if (sortBy === "nameReverse") {
-      updateData(data.sort((a, b) => (b.name < a.name ? 1 : -1)));
-    } else if (sortBy === "date") {
-      updateData(data.sort((a, b) => parseInt(a.update) - parseInt(b.update)));
-    } else {
-      updateData(data.sort((a, b) => parseInt(b.update) - parseInt(a.update)));
-    }
-  }, [sortBy, data]);
 
   const Add = async () => {
     if (projectName.length === 0) {
