@@ -9,7 +9,7 @@ import {
   FaRegCalendar,
   FaArrowUpAZ,
 } from "react-icons/fa6";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Loading from "@/../public/loading.gif";
 import Image from "next/image";
 import Link from "next/link";
@@ -32,14 +32,25 @@ type Project = {
   update: string;
 };
 
-const getProjects = async (username: string) => {
+const getProjects = async (
+  username: string,
+  updateData: React.Dispatch<React.SetStateAction<Project[]>>,
+  loadingState: React.Dispatch<React.SetStateAction<boolean>>
+) => {
   //todo get data from server
-  return MockProjects as Project[];
+  updateData(MockProjects as Project[]);
+  const timeout = new Promise((resolve, reject) =>
+    setTimeout(() => {
+      console.log("Finished");
+      resolve(200);
+    }, 2000)
+  );
+  await timeout;
+  loadingState(false);
 };
 
-const ProjectList: React.FC<{ projects: Project[] }> = ({ projects }) => {
-  const [page, changePage] = useState<number>(1);
-  const split = [];
+const splitList = (projects: Project[]) => {
+  let split = [];
   let row = [];
   for (let count = 0; count < projects.length; count++) {
     if (count % 5 === 0 && row.length > 0) {
@@ -49,11 +60,22 @@ const ProjectList: React.FC<{ projects: Project[] }> = ({ projects }) => {
     row.push(projects[count]);
   }
   split.push(row);
+  return split;
+};
+
+const ProjectList: React.FC<{ projects: Project[] }> = ({ projects }) => {
+  const [page, changePage] = useState<number>(1);
+  const [list, updateList] = useState<Array<Project[]>>(splitList(projects));
+
+  useEffect(() => {
+    updateList(splitList(projects));
+  }, [projects]);
+
   return (
     <>
       {projects.length > 0 ? (
         <div className="flex flex-col drop-shadow-lg">
-          {split[page - 1].map((project, count) => {
+          {list[page - 1].map((project, count) => {
             return (
               <div key={`projects - ${count}`}>
                 <div className="flex flex-row justify-between bg-[#F5F5F5] p-[18px]">
@@ -81,7 +103,7 @@ const ProjectList: React.FC<{ projects: Project[] }> = ({ projects }) => {
               className="mr-[6px]"
               onClick={() => {
                 if (page - 1 === 0) {
-                  changePage(split.length);
+                  changePage(list.length);
                   return;
                 }
                 changePage(page - 1);
@@ -92,24 +114,24 @@ const ProjectList: React.FC<{ projects: Project[] }> = ({ projects }) => {
             <input
               type="number"
               min="1"
-              max={split.length}
+              max={list.length}
               value={page}
               onChange={(e) => {
                 if (
                   parseInt(e.currentTarget.value) === 0 ||
-                  parseInt(e.currentTarget.value) > split.length
+                  parseInt(e.currentTarget.value) > list.length
                 )
                   return;
                 changePage(parseInt(e.currentTarget.value));
               }}
-              className="text-center text-[12px] w-[18px] bg-[#F5F5F5]"
+              className="text-center text-[12px] w-[18px] bg-[#F5F5F5] rounded-md"
             />
             <p className="text-[12px] mx-[6px]">from</p>
-            <p className="text-[12px] ">{split.length}</p>
+            <p className="text-[12px] ">{list.length}</p>
             <button
               className="ml-[6px]"
               onClick={() => {
-                if (page === split.length) {
+                if (page === list.length) {
                   changePage(1);
                   return;
                 }
@@ -136,10 +158,16 @@ const Projects: React.FC = () => {
   const [sortBy, changeSortBy] = useState<string>("date");
   const toast = useToast();
 
-  getProjects(session?.user?.name || "").then((res) => {
-    updateData(res);
-    loadingState(false);
-  });
+  useEffect(() => {
+    const data = getProjects(
+      session?.user?.name || "",
+      updateData,
+      loadingState
+    );
+    return () => {
+      Promise.reject(data);
+    };
+  }, [session]);
 
   const Add = async () => {
     if (projectName.length === 0) {
@@ -153,13 +181,13 @@ const Projects: React.FC = () => {
     onClose();
     loadingState(true);
     // todo update data
-    const TestPromise = new Promise((resolve, reject) => {
+    const test = new Promise((resolve, reject) =>
       setTimeout(() => {
-        console.log("Finished");
+        console.log("Finised Update");
         resolve(200);
-      }, 2000);
-    });
-    toast.promise(TestPromise, {
+      }, 2000)
+    );
+    toast.promise(test, {
       success: {
         title: "Success!",
         description: "New project has been created.",
@@ -173,17 +201,13 @@ const Projects: React.FC = () => {
         description: "Adding new project to your directory",
       },
     });
-    loadingState(false);
+    await test;
+    getProjects(session?.user?.name || "", updateData, loadingState);
   };
 
   return (
     <>
-      <Modal
-        isOpen={isOpen}
-        onClose={onClose}
-        isCentered
-        motionPreset="slideInTop"
-      >
+      <Modal isOpen={isOpen} onClose={onClose} motionPreset="slideInTop">
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Add Project</ModalHeader>
