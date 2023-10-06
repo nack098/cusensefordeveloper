@@ -115,6 +115,7 @@ const ProjectList: React.FC<{ projects: Project[] }> = ({ projects }) => {
               value={page}
               onChange={(e) => {
                 if (
+                  e.currentTarget.value.length === 0 ||
                   parseInt(e.currentTarget.value) === 0 ||
                   parseInt(e.currentTarget.value) > list.length
                 )
@@ -238,12 +239,16 @@ const Projects: React.FC = () => {
               <p className="font-bold text-[16px]">Projects list</p>
               <hr className="h-[1px] w-[298px] border-black" />
             </div>
-            <button
-              onClick={onOpen}
-              className="text-[12px] font-semibold bg-sky-400 hover:bg-red-400 duration-300 text-zinc-800 rounded-l-xl py-[2px] px-[10px]"
-            >
-              New Projects
-            </button>
+            {loading ? (
+              <div />
+            ) : (
+              <button
+                onClick={onOpen}
+                className="text-[12px] font-semibold bg-sky-400 hover:bg-red-400 duration-300 text-zinc-800 rounded-l-xl py-[2px] px-[10px]"
+              >
+                New Projects
+              </button>
+            )}
           </div>
           <div
             className={`${
