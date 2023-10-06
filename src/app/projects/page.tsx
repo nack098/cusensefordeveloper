@@ -155,7 +155,7 @@ const Projects: React.FC = () => {
   const [loading, loadingState] = useState<boolean>(true);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [projectName, changeProjectName] = useState<string>("");
-  const [sortBy, changeSortBy] = useState<string>("date");
+  const [sortBy, changeSortBy] = useState<string>("name");
   const toast = useToast();
 
   useEffect(() => {
@@ -168,6 +168,18 @@ const Projects: React.FC = () => {
       Promise.reject(data);
     };
   }, [session]);
+
+  useEffect(() => {
+    if (sortBy === "name") {
+      updateData(data.sort((a, b) => (a.name < b.name ? 1 : -1)));
+    } else if (sortBy === "nameReverse") {
+      updateData(data.sort((a, b) => (b.name < a.name ? 1 : -1)));
+    } else if (sortBy === "date") {
+      updateData(data.sort((a, b) => parseInt(a.update) - parseInt(b.update)));
+    } else {
+      updateData(data.sort((a, b) => parseInt(b.update) - parseInt(a.update)));
+    }
+  }, [sortBy, data]);
 
   const Add = async () => {
     if (projectName.length === 0) {
