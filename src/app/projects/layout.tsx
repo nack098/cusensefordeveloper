@@ -21,7 +21,7 @@ const ProjectLayout: React.FC<Props> = ({ children }) => {
   if (status === "unauthenticated") window.location.href = "/auth/login";
   if (!user) return;
   return (
-    <main className="flex flex-col w-full h-full bg-gradient-to-t from-[#60B9FF] to-[#DDF0FF]">
+    <main className="flex flex-col w-full h-full bg-gradient-to-t from-[#60B9FF] to-[60%] to-[#DDF0FF]">
       <Navbar user={user} />
       {children}
     </main>
