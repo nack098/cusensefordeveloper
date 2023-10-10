@@ -24,6 +24,11 @@ const LoginForm: React.FC = () => {
           duration: 2000,
           status: "success",
         });
+        await new Promise((resolve) =>
+          setTimeout(() => {
+            resolve(200);
+          }, 1000)
+        );
         window.location.href = "/projects";
       } else {
         toast({
