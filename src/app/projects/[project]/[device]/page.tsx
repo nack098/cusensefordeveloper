@@ -21,7 +21,7 @@ type Device = {
   org_email: string;
   org_tel: string;
   org_addr: string;
-  publish: number;
+  publish: boolean;
   date_create: string;
   date_update: string;
 };
@@ -46,7 +46,7 @@ const getDeviceData = async (): Promise<Device> => {
     org_email: "nack098askdlad@adjkald.com",
     org_tel: "091-241-1241",
     org_addr: "123 asdakjdl 213ajsdklasdj asjdkla",
-    publish: 1,
+    publish: true,
     date_create: "22 MO 1241",
     date_update: "44 mD 1515",
   };
@@ -67,7 +67,7 @@ const DeviceState: React.FC = () => {
   }, []);
 
   return (
-    <div className="w-full h-full grid">
+    <div className={`w-full h-full grid`}>
       {loading ? (
         <Image
           src={Loading}
@@ -76,29 +76,75 @@ const DeviceState: React.FC = () => {
           className="self-center justify-self-center"
         />
       ) : device_data ? (
-        <div className="bg-white w-full h-96 justify-self-center self-center grid grid-cols-3 grid-rows-1">
-          <div>
-            <p>
-              <b>ID:</b>
-              {device_data.id}
-            </p>
-            <p>
-              <b>Name:</b>
-              {device_data.name}
-            </p>
-            <div>
-              <p className="font-bold">Station Address:</p>
-              <p>{device_data.sta_addr}</p>
+        <div className="bg-white w-full py-5 px-10 justify-self-center self-center">
+          <div className="flex justify-between">
+            <div className="w-[50%]">
+              <p>
+                <b>ID:</b>
+                {device_data.id}
+              </p>
+              <p>
+                <b>Name:</b>
+                {device_data.name}
+              </p>
             </div>
-            <p>
-              <b>Remark:</b>
-              {device_data.remark}
-            </p>
-          </div>
-          <div className="col-span-2 justify-self-end text-end">
-            <div>
+            <div className="w-[50%]">
               <p className="font-bold">MAC address:</p>
               <p>{device_data.mac_address}</p>
+            </div>
+          </div>
+          <div>
+            <p className="font-bold">Station Address:</p>
+            <p>{device_data.sta_addr}</p>
+          </div>
+          <div>
+            <p className="font-bold">Abstract:</p>
+            <p>{device_data.abstract}</p>
+          </div>
+          <div>
+            <p className="font-bold">Remark:</p>
+            <p>{device_data.remark}</p>
+          </div>
+          <div className="flex justify-between">
+            <p className="w-[50%]">
+              <b>Organization:</b>
+              {device_data.org}
+            </p>
+            <p className="w-[50%]">
+              <b>Organization Tel.:</b>
+              {device_data.org_tel}
+            </p>
+          </div>
+          <div className="flex justify-between">
+            <p className="w-[50%]">
+              <b>Organization Person:</b>
+              {device_data.org_per}
+            </p>
+            <p className="w-[50%]">
+              <b>Organization Email:</b>
+              {device_data.org_email}
+            </p>
+          </div>
+          <div className="flex justify-between">
+            <div className="w-[50%]">
+              <p className="font-bold">Organization Address:</p>
+              <p>{device_data.org_addr}</p>
+            </div>
+            <div className="w-[50%]">
+              <p className="inline-block">
+                <b>Publish:</b>
+              </p>
+              <input type="checkbox" checked={device_data.publish} readOnly />
+            </div>
+          </div>
+          <div className="flex justify-between">
+            <div className="w-[50%]">
+              <p className="font-bold">Date Created:</p>
+              <p>{device_data.date_create}</p>
+            </div>
+            <div className="w-[50%]">
+              <p className="font-bold">Date Update:</p>
+              <p>{device_data.date_update}</p>
             </div>
           </div>
         </div>

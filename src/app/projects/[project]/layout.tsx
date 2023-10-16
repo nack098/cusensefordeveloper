@@ -1,4 +1,5 @@
-import Link from "next/link";
+"use client";
+import { useRouter } from "next/navigation";
 import { FaAngleLeft } from "react-icons/fa6";
 
 type Props = {
@@ -6,12 +7,13 @@ type Props = {
 };
 
 const Layout: React.FC<Props> = ({ children }) => {
+  const router = useRouter();
   return (
     <div className="mt-[25px] xl:my-[45px] mx-[90px] xl:mx-[375px]">
-      <Link href="/projects" className="font-bold text-[32px]">
+      <button onClick={router.back} className="font-bold text-[32px]">
         <FaAngleLeft className="inline-block" />
         <p className="inline-block text-center align-middle">Devices</p>
-      </Link>
+      </button>
       <hr className="border-black" />
       {children}
     </div>
