@@ -7,7 +7,7 @@ type Props = {
 
 const Layout: React.FC<Props> = ({ children }) => {
   return (
-    <div className="mt-[25px] xl:my-[45px] mx-[90px] xl:mx-[270px]">
+    <div className="mt-[25px] xl:my-[45px] mx-[90px] xl:mx-[375px]">
       <Link href="/projects" className="font-bold text-[32px]">
         <FaAngleLeft className="inline-block" />
         <p className="inline-block text-center align-middle">Devices</p>

@@ -13,7 +13,7 @@ type Props = {
 const Navbar: React.FC<{ user: Session }> = ({ user }) => {
   const [open, openState] = useState(false);
   return (
-    <nav className="flex flex-row self-center w-96 md:w-[50rem] xl:w-[1400px] justify-between mt-7 px-[30px] py-[10px] bg-[#F0F0F0] rounded-full drop-shadow-lg">
+    <nav className="flex flex-row self-center w-96 md:w-[48rem] xl:w-[75rem] justify-between mt-7 px-[30px] py-[10px] bg-[#F0F0F0] rounded-full drop-shadow-lg">
       <Image src={Logo} alt="logo" width={139} />
       <Popover
         trigger="hover"

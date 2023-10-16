@@ -31,7 +31,6 @@ type Project = {
   name: string;
   update: string;
 };
-
 const getProjects = async (
   username: string,
   updateData: React.Dispatch<React.SetStateAction<Project[]>>,
@@ -53,13 +52,17 @@ const splitList = (projects: Project[]) => {
   let split = [];
   let row = [];
   for (let count = 0; count < projects.length; count++) {
-    if (count % 5 === 0 && row.length > 0) {
+    row.push(projects[count]);
+    if (row.length === 5) {
       split.push(row);
       row = [];
+      continue;
     }
-    row.push(projects[count]);
+    if (row.length > 0 && count + 1 === projects.length) {
+      split.push(row);
+      continue;
+    }
   }
-  split.push(row);
   return split;
 };
 
@@ -200,7 +203,7 @@ const Projects: React.FC = () => {
       },
     });
     await test;
-    getProjects(session?.user?.name || "", updateData, loadingState);
+    await getProjects(session?.user?.name || "", updateData, loadingState);
   };
 
   return (
